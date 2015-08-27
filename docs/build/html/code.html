@@ -1,0 +1,494 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Auto Generated Documentation &mdash; Escape from Starsector 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Escape from Starsector 0.3 documentation" href="index.html" />
+    <link rel="prev" title="Future Directions" href="future.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="auto-generated-documentation">
+<h1>Auto Generated Documentation<a class="headerlink" href="#auto-generated-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-main">
+<span id="main-module"></span><h2>Main module<a class="headerlink" href="#module-main" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="main.main">
+<code class="descclassname">main.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#main.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Primary gameplay function. Initializes the pygame package and runs the main game loop.</p>
+<p>This function sets the variables for the main loop, gets the user keyboard inputs, and calls the
+functions and methods required to progress the game. The function iterates through the imported sprite
+groups to update each sprite across the screen. It tests collisions between the player ship hitboxes
+and enemy attacks/ships. Finally, it draws the background, sprites, enemies, and player ship to the
+screen.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>clock</strong> &#8211; a pygame class instance used to set the maximum framerate of the game.</li>
+<li><strong>font</strong> &#8211; the system font used when rendering HUD information.</li>
+<li><strong>done</strong> (<em>bool</em>) &#8211; responsible for ending the game. Game terminates on True</li>
+<li><strong>starting</strong> (<em>bool</em>) &#8211; must be True before enemies are spawned.</li>
+<li><strong>x_speed</strong> (<em>float</em>) &#8211; the horizontal movement speed of the ship.</li>
+<li><strong>y_speed</strong> (<em>float</em>) &#8211; vertical movement speed of the player ship.</li>
+<li><strong>distance_traveled</strong> (<em>int</em>) &#8211; number of frames elapsed in the game. Tempo variable for game progress.</li>
+<li><strong>deaths</strong> (<em>list</em>) &#8211; list of sprites &#8216;killed&#8217; in collisions with player ship, deleted after their explosion animation.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ship">
+<span id="ship-module"></span><h2>Ship module<a class="headerlink" href="#module-ship" title="Permalink to this headline">¶</a></h2>
+<p>Classes and objects defined:
+1. Ship: Class representing the player&#8217;s ship.
+2. ship_hitbox: Sprite group for player ship used in collision detection.</p>
+<dl class="class">
+<dt id="ship.Ship">
+<em class="property">class </em><code class="descclassname">ship.</code><code class="descname">Ship</code><a class="headerlink" href="#ship.Ship" title="Permalink to this definition">¶</a></dt>
+<dd><p>Player-controlled Ship class</p>
+<p>This class creates and controls the player ship that is always visible on the game screen.
+Most behavior is determined by attributes defined in the __init__ method, with the exception
+of x and y speeds, which are determined by keypresses in the &#8216;main&#8217; module.</p>
+<p>Methods defined:</p>
+<dl class="method">
+<dt id="ship.Ship.check_boundary">
+<code class="descname">check_boundary</code><span class="sig-paren">(</span><em>x_speed</em>, <em>y_speed</em><span class="sig-paren">)</span><a class="headerlink" href="#ship.Ship.check_boundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the player ship if it will run off the screen</p>
+<p>This method uses the main screen Surface instance and the ship&#8217;s current velocity to determine
+if the ship&#8217;s image is within a certain pixel range of the screen boundary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_speed</strong> &#8211; floating point horizontal movement speed calculated in the update method</li>
+<li><strong>y_speed</strong> &#8211; same as x_speed, for vertical movement.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">False if within a given pixel range of a boundary and moving towards that boundary
+True if not near the boundary, or if on the boundary but not moving toward the boundary</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ship.Ship.decrease_shields">
+<code class="descname">decrease_shields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ship.Ship.decrease_shields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert shield level to energy. Energy is capped at 100, and shield level at 0.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ship.Ship.draw_shield">
+<code class="descname">draw_shield</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ship.Ship.draw_shield" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get current shield level and draw the appropriate level over the ship image.</p>
+<p>This gives the player a visual representation of shield presence and shield level. Shield level
+is modulated by the alpha and width parameters. Width represents the thickness of the oval to be
+drawn, while alpha is an integer from 0-255 representing the opacity of a pygame surface. The shield
+surface opacity increases with shield level to give a more vibrant effect. At maximum levels, the
+method draws a second oval in white as an extra indicator that sheilds are full.
+The pygame.draw.arc function is used to draw the shield. THe position variable describes the
+x and y offsets needed to center the oval around the ship, as well as the horizontal and vertical
+sizes of the oval.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ship.Ship.increase_shields">
+<code class="descname">increase_shields</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ship.Ship.increase_shields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce energy levels to raise shield level by 1. Call the draw_shield method to update the screen.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ship.Ship.overdrive">
+<code class="descname">overdrive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ship.Ship.overdrive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the ship&#8217;s boost at +50% if energy is sufficient. Set the boost countdown timer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ship.Ship.take_damage">
+<code class="descname">take_damage</code><span class="sig-paren">(</span><em>damage</em><span class="sig-paren">)</span><a class="headerlink" href="#ship.Ship.take_damage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjust the shield level in response to damage. Quit the game if ship damage is taken.</p>
+<p>This method is currently the only way to end the game. Damage that reduces the shields below
+zero will return true to the main module, ending the game loop.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>damage</strong> &#8211; Integer value from the main module. This is either attack damage or collision damage</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">False if there was enough shield to absorb the damage
+True if damage taken was more than shield level.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ship.Ship.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>x_speed</em>, <em>y_speed</em>, <em>distance_traveled</em><span class="sig-paren">)</span><a class="headerlink" href="#ship.Ship.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate ship velocity, draw it on screen, and update various timers.</p>
+<p>This method calculates ship velocity based on input x and y speeds, as well as active overdrives.
+As only 8 directions of movement are possible, a simple calculation is performed to make diagonal
+movement close in magnitude to cardinal movement.
+Active overdrives are counted down by 1 per frame.
+If the player has less than 100 (maximum) energy, energy levels are increased every 65 frames traveled.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x_speed</strong> &#8211; input from main module, positive if right arrow was pressed, negative for left arrow</li>
+<li><strong>y_speed</strong> &#8211; same as x_speed, positive for down arrow, negative for up arrow</li>
+<li><strong>distance_traveled</strong> &#8211; input from main, an integer count of elapsed frames in the game loop</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ship.Ship.update_position">
+<code class="descname">update_position</code><span class="sig-paren">(</span><em>x_speed</em>, <em>y_speed</em><span class="sig-paren">)</span><a class="headerlink" href="#ship.Ship.update_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the position of the ship&#8217;s image and associated hitboxes</p>
+<p>As mentioned in init documentation, pygame.rect values are rounded (down) to integer values
+at assignment. This results in irregular movement when floating point velocities are employed.
+Thus, the position attribute is used to store the true position of the ship&#8217;s image. This
+attribute is then copied to give a pixel-approximation of the position. The same logic applies
+for hitbox movements.
+Positions are not updated if the check_boundary method fails.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x_speed</strong> &#8211; a floating point number calculated in the update method for horizontal movement</li>
+<li><strong>y_speed</strong> &#8211; same as x_speed, but for vertical movement.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-enemies">
+<span id="enemies-module"></span><h2>Enemies module<a class="headerlink" href="#module-enemies" title="Permalink to this headline">¶</a></h2>
+<p>Classes and objects exported:
+Hitbox: Class used for collision detection on enemy attacks and ships.
+enemies: Sprite group containing the images and hitboxes of enemies.
+attacks: Sprite group that includes only the drawn images of enemy attacks.
+shots: Sprite group that holds hitboxes for various attacks.
+Note: attacks and shots are maintained as separate groups to allow for hitbox calibration during testing. Attacks are drawn on screen, shots should not be.</p>
+<dl class="class">
+<dt id="enemies.AngledAttack">
+<em class="property">class </em><code class="descclassname">enemies.</code><code class="descname">AngledAttack</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#enemies.AngledAttack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple subclass of BasicAttack. Hitboxes were recalibrated to line up with attack image.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="enemies.BasicAttack">
+<em class="property">class </em><code class="descclassname">enemies.</code><code class="descname">BasicAttack</code><span class="sig-paren">(</span><em>source</em>, <em>offset</em>, <em>angle</em>, <em>velocity</em>, <em>damage</em>, <em>line_length</em>, <em>line_width</em>, <em>color=(255</em>, <em>0</em>, <em>0)</em><span class="sig-paren">)</span><a class="headerlink" href="#enemies.BasicAttack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Super class for all straight line attacks.</p>
+<p>This class defines a standard, non-accelerating, single-image attack. It contains all methods
+required to produce a functional attack, calibrated to the BasicEnemy class. It is meant to be
+subclassed by specific types of attacks that require different parameters.
+Methods defined:</p>
+<dl class="method">
+<dt id="enemies.BasicAttack.calc_and_draw">
+<code class="descname">calc_and_draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enemies.BasicAttack.calc_and_draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjust velocity based on angle of firing. Calculate line terminus from line origin, angle, and length.</p>
+<p>This method uses simple trig calculations to change the velocity (while keeping magnitude) of an attack.
+Those calculations are also used to determine where the endpoint of an attack line should be drawn. Finally,
+it draws the calculated line on the attack surface.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enemies.BasicAttack.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enemies.BasicAttack.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the position of the sprite, then draw it on screen. Determine if attack has run off the screen.</p>
+<p>Again, position is used here to avoid integer rounding. Hitboxes are updated at the same time to
+avoid disconnects between the hitbox and the image of the sprite on screen. The sprite is killed
+(removed from all sprite groups, thus garbage collected) if it runs far enough off screen. It is
+also killed if its corresponding hitbox is not in the shots sprite group due to a collision with
+the player ship.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="enemies.BasicEnemy">
+<em class="property">class </em><code class="descclassname">enemies.</code><code class="descname">BasicEnemy</code><a class="headerlink" href="#enemies.BasicEnemy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Super class defining a functioning enemy.</p>
+<p>This class contains everything necessary to instantiate a standard enemy on the game screen. It
+is meant to be subclassed by overwritting the image, mass, cooldowns, lifetimes, and explosion_offset
+attributes, as well as the attack method.
+Behaviorally, instances of this class spawn just above the screen at a random horizontal location,
+slowly moving down until they are two image-widths on screen. They then slow down and attack at
+random intervals until their lifetime (in frames drawn) expires, at which point they accelerate and
+move off the bottom of the screen. Subclasses of enemies with specific movements should overwrite
+the intro and outro methods as well.</p>
+<p>Methods defined:</p>
+<dl class="method">
+<dt id="enemies.BasicEnemy.attack">
+<code class="descname">attack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enemies.BasicEnemy.attack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce the attack cooldown and try to fire a shot. If fired, restart the cooldown.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enemies.BasicEnemy.intro">
+<code class="descname">intro</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enemies.BasicEnemy.intro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move the enemy forward until it is just inside the screen. Allow attacks when introduction is over.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enemies.BasicEnemy.outro">
+<code class="descname">outro</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enemies.BasicEnemy.outro" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accelerate the ship every 5 frames until about 5 pixels/frame. Disallow further attacks.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enemies.BasicEnemy.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enemies.BasicEnemy.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Countdown the lifetime of the enemy, update its position, and make attacks.</p>
+<p>This method counts down the main lifetime of an enemy ship and updates its position. If the
+ship is still in its introduction sequence, most of the method is skipped. In main phase, the
+ship calls attack every frame and has its position updated via the update_position method.
+If the ship moves off the bottom of the screen, it is deleted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None if the ship is still in its introduction</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="enemies.BasicEnemy.update_position">
+<code class="descname">update_position</code><span class="sig-paren">(</span><em>velocity</em><span class="sig-paren">)</span><a class="headerlink" href="#enemies.BasicEnemy.update_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the position of the image and copy that float to the image&#8217;s rect attribute.
+:param list velocity: Integer or float that defines movement in pixels/frame</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="enemies.DrawExplosions">
+<em class="property">class </em><code class="descclassname">enemies.</code><code class="descname">DrawExplosions</code><span class="sig-paren">(</span><em>position</em><span class="sig-paren">)</span><a class="headerlink" href="#enemies.DrawExplosions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Animation class for small-scale explosion instances drawn directly on screen.</p>
+<p>This class uses a sliding &#8216;window&#8217; frame over a larger image to simulate an explosion centered on an
+enemy that has just collided with the player&#8217;s ship. On instantiation, the entire explosion image array
+is loaded. A small frame surface is defined and centered over the first explosion image. The &#8216;window&#8217; frame
+is then moved across the array every in-game loop frame, resulting in a 20-frame explosion animation.</p>
+<p>Methods defined:</p>
+<dl class="method">
+<dt id="enemies.DrawExplosions.calculate_frame_offset">
+<code class="descname">calculate_frame_offset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enemies.DrawExplosions.calculate_frame_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate the window frame 80 pixels until frame 4, then reset to the left and move the frame down 1 row.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="enemies.DrawExplosions.draw">
+<code class="descname">draw</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enemies.DrawExplosions.draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draw the explosion image to the window frame, then draw the window to the main screen. Advance the frame.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="enemies.Fighter">
+<em class="property">class </em><code class="descclassname">enemies.</code><code class="descname">Fighter</code><a class="headerlink" href="#enemies.Fighter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass of BasicEnemy with altered attacks and a custom hitbox.</p>
+<p>This class alters the hitboxes and attacks of the BasicEnemy class. Number of attacks increased from
+one to three, with both angled and straight attacks. The hitbox size was reduced from the full image
+size due to large unfilled areas on the source image.</p>
+<dl class="docutils">
+<dt>Methods overwritten:</dt>
+<dd><ol class="first last arabic simple">
+<li>attack</li>
+</ol>
+</dd>
+</dl>
+<dl class="method">
+<dt id="enemies.Fighter.attack">
+<code class="descname">attack</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#enemies.Fighter.attack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to attack method of super class. Fires either two angled shots on regular cooldown or one powerful
+shot on shorter cooldown.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="enemies.Hitbox">
+<em class="property">class </em><code class="descclassname">enemies.</code><code class="descname">Hitbox</code><span class="sig-paren">(</span><em>width</em>, <em>height</em>, <em>x_pos</em>, <em>y_pos</em>, <em>damage</em><span class="sig-paren">)</span><a class="headerlink" href="#enemies.Hitbox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hitbox sprite class using pygame.rect attributes for use in collision testing</p>
+<p>This class is meant to be used by the player Ship class, enemy attacks, and most enemy classes for
+fast and sufficiently accurate collision detection. A hitbox defined here is a rectangular sprite
+that must be added to the enemies or shots sprite groups for collision detection to occur.
+A separate hitbox is necessary when a ship&#8217;s image contains even small amounts of blank space at the edges
+of the rectangle defining the image of the ship. Some large ships, or ships of a complex shape, may
+require multiple hitboxes.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="enemies.PowerLaser">
+<em class="property">class </em><code class="descclassname">enemies.</code><code class="descname">PowerLaser</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#enemies.PowerLaser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subclass of BasicAttack. Only hitbox calibration changed.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-background_generator">
+<span id="background-module"></span><h2>Background module<a class="headerlink" href="#module-background_generator" title="Permalink to this headline">¶</a></h2>
+<p>Classes and objects exported:
+1. Background: Class that generates and updates the parallax starfield.</p>
+<dl class="class">
+<dt id="background_generator.Background">
+<em class="property">class </em><code class="descclassname">background_generator.</code><code class="descname">Background</code><a class="headerlink" href="#background_generator.Background" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for creating and displaying a parallax starfield</p>
+<p>This class spawns instances of the Star class to populate a blank background with single pixel stars
+moving at various rates for a parallax effect. Each new frame of the game shifts the stars down and
+there is a 1/7 chance that a new star will spawn. That rate is applied to all vertical pixels on
+initialization to populate the background at the same density and distribution as when the game
+is running.</p>
+<p>Methods defined:</p>
+<dl class="method">
+<dt id="background_generator.Background.populate">
+<code class="descname">populate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#background_generator.Background.populate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill the new, blank screen with a uniform distribution of stars.</p>
+<p>This method, meant to be called only once, iterates through the vertical screen pixels,
+spawning a star 1/7th of the time. The y-value of that pixel is then passed to Star for placement.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="background_generator.Background.spawn_star">
+<code class="descname">spawn_star</code><span class="sig-paren">(</span><em>y_pos=None</em><span class="sig-paren">)</span><a class="headerlink" href="#background_generator.Background.spawn_star" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new star and add it to the stars sprite group</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="background_generator.Background.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#background_generator.Background.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose if a star will spawn and kill any stars that fall off the screen. Draw all stars.</p>
+<p>This is called on each frame of the game loop to see if a new star will spawn. It is also
+responsible for moving the stars at their given speeds across the screen.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="background_generator.Star">
+<em class="property">class </em><code class="descclassname">background_generator.</code><code class="descname">Star</code><span class="sig-paren">(</span><em>y_pos=None</em><span class="sig-paren">)</span><a class="headerlink" href="#background_generator.Star" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple pygame.Sprite class that generates single pixel stars</p>
+<p>Instances of this class are used by the Background class as individual stars. The stars are
+randomly given a vertical speed in pixels/frame. Star uses the rect.center attribute to track
+its location. As such, all star speeds must be integer values.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Auto Generated Documentation</a><ul>
+<li><a class="reference internal" href="#module-main">Main module</a></li>
+<li><a class="reference internal" href="#module-ship">Ship module</a></li>
+<li><a class="reference internal" href="#module-enemies">Enemies module</a></li>
+<li><a class="reference internal" href="#module-background_generator">Background module</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="future.html" title="previous chapter">Future Directions</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/code.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Eric Harris.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/code.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
